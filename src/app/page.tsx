@@ -7,7 +7,10 @@ export default function HomePage() {
     const tasker = taskerFactory.createTasker();
     await tasker.create(
       "sendEmail",
-      JSON.stringify({ to: "email@example.com" }),
+      JSON.stringify({
+        temaplate: "organizerRequestEmail",
+        to: "email@example.com",
+      }),
     );
   }
   return (
