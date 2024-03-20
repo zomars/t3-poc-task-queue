@@ -32,4 +32,7 @@ export class RedisTasker implements Tasker {
   processQueue(): Promise<void> {
     throw new Error("Method not implemented.");
   }
+  cleanup(): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
 }
