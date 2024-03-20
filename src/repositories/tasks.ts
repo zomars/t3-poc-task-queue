@@ -27,6 +27,10 @@ export class Task {
     });
     return tasks;
   }
+  static async count() {
+    const tasks = await db.task.count();
+    return tasks;
+  }
   static async retry(taskId: number, lastError?: string) {
     const task = await db.task.update({
       where: {
