@@ -1,5 +1,8 @@
 import { type Metadata } from "next";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 
+import { FailedTasks } from "~/components/failed-tasks";
+import NewTaskButton from "~/components/new-task-button";
 import {
   Card,
   CardContent,
@@ -9,7 +12,6 @@ import {
 } from "~/components/ui/card";
 import { UpcomingTasks } from "~/components/upcoming-tasks";
 import { Task } from "~/repositories/tasks";
-import NewTaskButton from "../components/new-task-button";
 export const metadata: Metadata = {
   title: "Dashboard",
   description: "Task management dashboard.",
@@ -50,19 +52,42 @@ export default async function DashboardPage() {
               </CardContent>
             </Card>
           </div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-            <Card className="col-span-7">
-              <CardHeader>
-                <CardTitle>Upcoming Tasks</CardTitle>
-                <CardDescription>
-                  You have {taskCount} pending tasks.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <UpcomingTasks />
-              </CardContent>
-            </Card>
-          </div>
+          <Tabs defaultValue="upcoming" className="space-y-4">
+            <TabsList>
+              <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
+              <TabsTrigger value="failed">Failed</TabsTrigger>
+            </TabsList>
+            <TabsContent value="upcoming" className="space-y-4">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                <Card className="col-span-7">
+                  <CardHeader>
+                    <CardTitle>Upcoming Tasks</CardTitle>
+                    <CardDescription>
+                      You have {taskCount} pending tasks.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <UpcomingTasks />
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+            <TabsContent value="failed" className="space-y-4">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                <Card className="col-span-7">
+                  <CardHeader>
+                    <CardTitle>Failed Tasks</CardTitle>
+                    <CardDescription>
+                      You have {failedTaskCount} failed tasks.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <FailedTasks />
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </>

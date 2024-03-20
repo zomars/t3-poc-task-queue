@@ -27,6 +27,22 @@ export class Task {
     });
     return tasks;
   }
+  static async getFailed() {
+    const tasks = await db.task.findMany({
+      where: {
+        attempts: {
+          /** Get only tasks where attempts is less than maxAttemps */
+          equals: {
+            // @ts-expect-error prisma is tripping
+            _ref: "maxAttempts",
+            _container: "Task",
+          },
+        },
+      },
+      take: 10,
+    });
+    return tasks;
+  }
   static async count() {
     const tasks = await db.task.count({
       where: {
