@@ -10,7 +10,7 @@ type TaskHandler = (payload: string) => Promise<void>;
 const tasks: Record<TaskTypes, Promise<TaskHandler>> = {
   sendEmail: import("./sendEmail").then((module) => module.sendEmail),
   sendWebhook: import("./sendWebook").then((module) => module.sendWebhook),
-  sendSms: Promise.reject(new Error("Not implemented")),
+  sendSms: Promise.resolve(() => Promise.reject(new Error("Not implemented"))),
 };
 
 export default tasks;
