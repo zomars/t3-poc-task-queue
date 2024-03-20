@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "~/components/ui/button";
-import { createTask } from "../actions";
+import { createTask } from "../app/actions";
 
 const NewTaskButton = () => {
   return (
