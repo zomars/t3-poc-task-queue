@@ -1,0 +1,11 @@
+// Task is used to store tasks that need to be processed by the background worker
+model Task {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  type        String
+  payload     String
+  attempts    Int      @default(0)
+  maxAttempts Int      @default(3)
+  lastError   String?
+}

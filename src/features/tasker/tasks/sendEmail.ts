@@ -11,8 +11,8 @@ export async function sendEmail(payload: string): Promise<void> {
   try {
     const parsedPayload = sendEmailPayloadSchema.parse(JSON.parse(payload));
     console.log(parsedPayload);
-    // 50% chance of failing
-    if (Math.random() > 0.5) throw new Error("Failed to send email");
+    // 30% chance of failing
+    if (Math.random() > 0.7) throw new Error("Failed to send email");
     // ... send email
   } catch (error) {
     // ... handle error
