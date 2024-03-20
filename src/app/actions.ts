@@ -13,5 +13,5 @@ export async function createTask() {
       to: "email@example.com",
     }),
   );
-  revalidatePath("/dashboard");
+  revalidatePath("/");
 }
