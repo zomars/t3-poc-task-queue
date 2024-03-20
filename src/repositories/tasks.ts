@@ -31,6 +31,21 @@ export class Task {
     const tasks = await db.task.count();
     return tasks;
   }
+  static async countFailed() {
+    const tasks = await db.task.count({
+      where: {
+        attempts: {
+          /** Get only tasks where attempts is less than maxAttemps */
+          equals: {
+            // @ts-expect-error prisma is tripping
+            _ref: "maxAttempts",
+            _container: "Task",
+          },
+        },
+      },
+    });
+    return tasks;
+  }
   static async retry(taskId: number, lastError?: string) {
     const task = await db.task.update({
       where: {

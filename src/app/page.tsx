@@ -17,6 +17,7 @@ export const metadata: Metadata = {
 
 export default async function DashboardPage() {
   const taskCount = await Task.count();
+  const failedTaskCount = await Task.countFailed();
   return (
     <>
       <div className="flex flex-col">
@@ -45,7 +46,7 @@ export default async function DashboardPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">0</div>
+                <div className="text-2xl font-bold">{failedTaskCount}</div>
               </CardContent>
             </Card>
           </div>
