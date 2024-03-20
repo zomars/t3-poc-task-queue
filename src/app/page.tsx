@@ -8,7 +8,7 @@ export default function HomePage() {
     await tasker.create(
       "sendEmail",
       JSON.stringify({
-        temaplate: "organizerRequestEmail",
+        template: "organizerRequestEmail",
         to: "email@example.com",
       }),
     );

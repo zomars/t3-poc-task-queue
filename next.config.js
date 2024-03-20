@@ -5,6 +5,8 @@
 await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+  rewrites: [{ source: "/", destination: "/dashboard" }],
+};
 
 export default config;

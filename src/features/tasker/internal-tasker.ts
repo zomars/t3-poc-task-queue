@@ -17,12 +17,16 @@ export class InternalTasker implements Tasker {
 
     const tasksPromises = tasks.map(async (task) => {
       const taskHandler = await tasksMap[task.type as keyof typeof tasksMap];
-      return taskHandler(task.payload).catch(async (error) => {
-        await Task.retry(
-          task.id,
-          error instanceof Error ? error.message : "Unknown error",
-        );
-      });
+      return taskHandler(task.payload)
+        .then(async () => {
+          await Task.succeed(task.id);
+        })
+        .catch(async (error) => {
+          await Task.retry(
+            task.id,
+            error instanceof Error ? error.message : "Unknown error",
+          );
+        });
     });
     const settled = await Promise.allSettled(tasksPromises);
     const failed = settled.filter((result) => result.status === "rejected");

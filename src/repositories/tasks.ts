@@ -17,10 +17,9 @@ export class Task {
         attempts: {
           /** Get only tasks where attempts is less than maxAttemps */
           lt: {
-            isList: false,
-            modelName: "Task",
-            name: "maxAttempts",
-            typeName: "Int",
+            // @ts-expect-error prisma is tripping
+            _ref: "maxAttempts",
+            _container: "Task",
           },
         },
       },
@@ -36,6 +35,14 @@ export class Task {
       data: {
         attempts: { increment: 1 },
         lastError,
+      },
+    });
+    return task;
+  }
+  static async succeed(taskId: number) {
+    const task = await db.task.delete({
+      where: {
+        id: taskId,
       },
     });
     return task;
