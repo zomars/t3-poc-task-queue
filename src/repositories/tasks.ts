@@ -28,7 +28,18 @@ export class Task {
     return tasks;
   }
   static async count() {
-    const tasks = await db.task.count();
+    const tasks = await db.task.count({
+      where: {
+        attempts: {
+          /** Get only tasks where attempts is less than maxAttemps */
+          lt: {
+            // @ts-expect-error prisma is tripping
+            _ref: "maxAttempts",
+            _container: "Task",
+          },
+        },
+      },
+    });
     return tasks;
   }
   static async countFailed() {
