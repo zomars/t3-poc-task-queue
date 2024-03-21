@@ -15,3 +15,10 @@ export async function createTask() {
   );
   revalidatePath("/");
 }
+
+export async function cleanTasks() {
+  const taskerFactory = new TaskerFactory();
+  const tasker = taskerFactory.createTasker();
+  await tasker.cleanup();
+  revalidatePath("/");
+}

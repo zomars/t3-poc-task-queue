@@ -10,7 +10,7 @@ export async function TasksList({ tasks }: { tasks: Task[] }) {
             <AvatarImage src="/avatars/01.png" alt="Avatar" />
             <AvatarFallback>T</AvatarFallback>
           </Avatar>
-          <div className="ml-4 space-y-1">
+          <div className="ml-4 space-y-1 overflow-x-hidden">
             <p className="text-sm font-medium leading-none">
               {task.createdAt.toLocaleDateString()}{" "}
               {task.createdAt.toLocaleTimeString()} — {task.type}
