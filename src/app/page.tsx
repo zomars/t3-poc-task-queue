@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 
 import { FailedTasks } from "~/components/failed-tasks";
 import NewTaskButton from "~/components/new-task-button";
+import { SucceededTasks } from "~/components/succeeded-tasks";
 import {
   Card,
   CardContent,
@@ -78,6 +79,7 @@ export default async function DashboardPage() {
             <TabsList>
               <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
               <TabsTrigger value="failed">Failed</TabsTrigger>
+              <TabsTrigger value="succeeded">Succeeded</TabsTrigger>
             </TabsList>
             <TabsContent value="upcoming" className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
@@ -105,6 +107,21 @@ export default async function DashboardPage() {
                   </CardHeader>
                   <CardContent>
                     <FailedTasks />
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+            <TabsContent value="succeeded" className="space-y-4">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                <Card className="col-span-7">
+                  <CardHeader>
+                    <CardTitle>Succeded Tasks</CardTitle>
+                    <CardDescription>
+                      You have {succeededTaskCount} failed tasks.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <SucceededTasks />
                   </CardContent>
                 </Card>
               </div>

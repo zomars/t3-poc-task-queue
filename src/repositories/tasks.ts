@@ -52,6 +52,14 @@ export class Task {
     });
     return tasks;
   }
+  static async getSucceeded() {
+    const tasks = await db.task.findMany({
+      where: {
+        succeededAt: { not: null },
+      },
+    });
+    return tasks;
+  }
   static async count() {
     const tasks = await db.task.count();
     return tasks;
@@ -103,6 +111,7 @@ export class Task {
         id: taskId,
       },
       data: {
+        attempts: { increment: 1 },
         succeededAt: new Date(),
       },
     });

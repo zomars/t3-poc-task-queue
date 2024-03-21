@@ -4,6 +4,11 @@
  */
 await import("./src/env.js");
 
+if (process.env.NODE_ENV === "development") {
+  const main = await import("./cron-tester.js").then((m) => m.main);
+  main();
+}
+
 /** @type {import("next").NextConfig} */
 const config = {};
 
