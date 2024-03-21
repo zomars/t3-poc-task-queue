@@ -51,6 +51,9 @@ export class Task {
   static async getNextBatch() {
     const tasks = await db.task.findMany({
       where: upcomingTasksWhere,
+      orderBy: {
+        scheduledAt: "asc",
+      },
       take: 100,
     });
     return tasks;

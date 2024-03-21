@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/tasks/cron",
-      "schedule": "* * * * *"
+      "schedule": "10 * * * * *"
     },
     {
       "path": "/api/tasks/cleanup",
