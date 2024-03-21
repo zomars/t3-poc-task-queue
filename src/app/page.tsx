@@ -1,6 +1,7 @@
 import { type Metadata } from "next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 
+import { AllTasks } from "~/components/all-tasks";
 import { FailedTasks } from "~/components/failed-tasks";
 import NewTaskButton from "~/components/new-task-button";
 import { SucceededTasks } from "~/components/succeeded-tasks";
@@ -77,17 +78,33 @@ export default async function DashboardPage() {
           </div>
           <Tabs defaultValue="upcoming" className="space-y-4">
             <TabsList>
+              <TabsTrigger value="all">All</TabsTrigger>
               <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
               <TabsTrigger value="failed">Failed</TabsTrigger>
               <TabsTrigger value="succeeded">Succeeded</TabsTrigger>
             </TabsList>
+            <TabsContent value="all" className="space-y-4">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                <Card className="col-span-7">
+                  <CardHeader>
+                    <CardTitle>All Tasks</CardTitle>
+                    <CardDescription>
+                      You have {taskCount} tasks.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <AllTasks />
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
             <TabsContent value="upcoming" className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
                 <Card className="col-span-7">
                   <CardHeader>
                     <CardTitle>Upcoming Tasks</CardTitle>
                     <CardDescription>
-                      You have {taskCount} pending tasks.
+                      You have {upcomingTaskCount} pending tasks.
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -117,7 +134,7 @@ export default async function DashboardPage() {
                   <CardHeader>
                     <CardTitle>Succeded Tasks</CardTitle>
                     <CardDescription>
-                      You have {succeededTaskCount} failed tasks.
+                      You have {succeededTaskCount} succeded tasks.
                     </CardDescription>
                   </CardHeader>
                   <CardContent>

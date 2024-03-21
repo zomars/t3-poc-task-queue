@@ -2,6 +2,20 @@ import { type Prisma } from "@prisma/client";
 import { type TaskTypes } from "~/features/tasker/tasker";
 import { db } from "~/server/db";
 
+const whereSucceeded: Prisma.TaskWhereInput = {
+  succeededAt: { not: null },
+};
+
+const whereMaxAttempsReached: Prisma.TaskWhereInput = {
+  attempts: {
+    equals: {
+      // @ts-expect-error prisma is tripping: '_ref' does not exist in type 'FieldRef<"Task", "Int">'
+      _ref: "maxAttempts",
+      _container: "Task",
+    },
+  },
+};
+
 const upcomingTasksWhere: Prisma.TaskWhereInput = {
   // Get only tasks that have not succeeded yet
   succeededAt: null,
@@ -19,6 +33,7 @@ const upcomingTasksWhere: Prisma.TaskWhereInput = {
     },
   },
 };
+
 export class Task {
   static async create(type: TaskTypes, payload: string) {
     const newTask = await db.task.create({
@@ -29,6 +44,10 @@ export class Task {
     });
     return newTask;
   }
+  static async getAll() {
+    const tasks = await db.task.findMany();
+    return tasks;
+  }
   static async getNextBatch() {
     const tasks = await db.task.findMany({
       where: upcomingTasksWhere,
@@ -38,25 +57,13 @@ export class Task {
   }
   static async getFailed() {
     const tasks = await db.task.findMany({
-      where: {
-        // Get only tasks where maxAttemps has been reached
-        attempts: {
-          equals: {
-            // @ts-expect-error prisma is tripping: '_ref' does not exist in type 'FieldRef<"Task", "Int">'
-            _ref: "maxAttempts",
-            _container: "Task",
-          },
-        },
-      },
-      take: 10,
+      where: whereMaxAttempsReached,
     });
     return tasks;
   }
   static async getSucceeded() {
     const tasks = await db.task.findMany({
-      where: {
-        succeededAt: { not: null },
-      },
+      where: whereSucceeded,
     });
     return tasks;
   }
@@ -72,24 +79,13 @@ export class Task {
   }
   static async countFailed() {
     const tasks = await db.task.count({
-      where: {
-        // Get only tasks where maxAttemps has been reached
-        attempts: {
-          equals: {
-            // @ts-expect-error prisma is tripping: '_ref' does not exist in type 'FieldRef<"Task", "Int">'
-            _ref: "maxAttempts",
-            _container: "Task",
-          },
-        },
-      },
+      where: whereMaxAttempsReached,
     });
     return tasks;
   }
   static async countSucceeded() {
     const tasks = await db.task.count({
-      where: {
-        succeededAt: { not: null },
-      },
+      where: whereSucceeded,
     });
     return tasks;
   }
@@ -122,17 +118,9 @@ export class Task {
       where: {
         OR: [
           // Get tasks that have succeeded
-          { succeededAt: { not: null } },
+          whereSucceeded,
           // Get tasks where maxAttemps has been reached
-          {
-            attempts: {
-              equals: {
-                // @ts-expect-error prisma is tripping: '_ref' does not exist in type 'FieldRef<"Task", "Int">'
-                _ref: "maxAttempts",
-                _container: "Task",
-              },
-            },
-          },
+          whereMaxAttempsReached,
         ],
       },
     });
