@@ -78,7 +78,7 @@ export default async function DashboardPage() {
               </CardContent>
             </Card>
           </div>
-          <Tabs defaultValue="upcoming" className="space-y-4">
+          <Tabs defaultValue="all" className="space-y-4">
             <TabsList>
               <TabsTrigger value="all">All</TabsTrigger>
               <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
