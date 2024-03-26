@@ -13,7 +13,7 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { UpcomingTasks } from "~/components/upcoming-tasks";
-import { Task } from "~/repositories/tasks";
+import { Task } from "~/features/tasker/respository";
 import { cleanTasks, createTask } from "./actions";
 export const metadata: Metadata = {
   title: "Dashboard",

@@ -16,13 +16,12 @@ const whereMaxAttempsReached: Prisma.TaskWhereInput = {
   },
 };
 
-const upcomingTasksWhere: Prisma.TaskWhereInput = {
+const whereUpcomingTasks: Prisma.TaskWhereInput = {
   // Get only tasks that have not succeeded yet
   succeededAt: null,
-  // Get only tasks that are scheduled to run for today
+  // Get only tasks that are scheduled to run now or in the past
   scheduledAt: {
-    gt: new Date(new Date().setDate(new Date().getDate() - 1)),
-    lt: new Date(new Date().setDate(new Date().getDate() + 1)),
+    lt: new Date(),
   },
   // Get only tasks where maxAttemps has not been reached
   attempts: {
@@ -35,27 +34,34 @@ const upcomingTasksWhere: Prisma.TaskWhereInput = {
 };
 
 export class Task {
-  static async create(type: TaskTypes, payload: string) {
+  static async create(
+    type: TaskTypes,
+    payload: string,
+    options: { scheduledAt?: Date; maxAttempts?: number } = {},
+  ) {
+    const { scheduledAt, maxAttempts } = options;
     const newTask = await db.task.create({
       data: {
         payload,
         type,
+        scheduledAt,
+        maxAttempts,
       },
     });
     return newTask;
   }
-  static async getAll() {
-    const tasks = await db.task.findMany();
-    return tasks;
-  }
   static async getNextBatch() {
     const tasks = await db.task.findMany({
-      where: upcomingTasksWhere,
+      where: whereUpcomingTasks,
       orderBy: {
         scheduledAt: "asc",
       },
       take: 100,
     });
+    return tasks;
+  }
+  static async getAll() {
+    const tasks = await db.task.findMany();
     return tasks;
   }
   static async getFailed() {
@@ -76,7 +82,7 @@ export class Task {
   }
   static async countUpcoming() {
     const tasks = await db.task.count({
-      where: upcomingTasksWhere,
+      where: whereUpcomingTasks,
     });
     return tasks;
   }
@@ -112,6 +118,14 @@ export class Task {
       data: {
         attempts: { increment: 1 },
         succeededAt: new Date(),
+      },
+    });
+    return task;
+  }
+  static async cancel(taskId: number) {
+    const task = await db.task.delete({
+      where: {
+        id: taskId,
       },
     });
     return task;

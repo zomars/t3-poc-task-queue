@@ -1,4 +1,4 @@
-import { Task } from "~/repositories/tasks";
+import { Task } from "~/features/tasker/respository";
 import { TasksList } from "./tasks-list";
 
 export async function UpcomingTasks() {
